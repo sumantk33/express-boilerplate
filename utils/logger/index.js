@@ -6,7 +6,7 @@ import { env } from '../env/index.js';
 
 const timestampFormat = 'MMM-DD-YYYY HH:mm:ss';
 
-const LOGGER_TYPES = {
+export const LOGGER_TYPES = {
   DEBUG: 'debug',
   ERROR: 'error',
   INFO: 'info',

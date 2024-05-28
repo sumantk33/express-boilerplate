@@ -1,6 +1,6 @@
 import ctx from "../context/index.js";
 import { HEADERS } from "../enums.js";
-import logger from "../logger/index.js";
+import logger, { LOGGER_TYPES } from "../logger/index.js";
 
 const STATUS_CODES = {
 	OK: 200,
@@ -11,6 +11,7 @@ const STATUS_CODES = {
 	FORBIDDEN: 403,
 	NOT_FOUND: 404,
 	METHOD_NOT_ALLOWED: 405,
+	TOO_MANY_REQUESTS: 429,
 	INTERNAL_SERVER_ERROR: 500,
 };
 
@@ -31,7 +32,12 @@ function apiResponseFormat({
 		},
 	};
 
-	logger.log("Response log", responseFormat);
+	let loggerType = LOGGER_TYPES.LOG;
+	if (!success) {
+		loggerType = LOGGER_TYPES.ERROR;
+	}
+
+	logger[loggerType]("Response log", responseFormat);
 	return responseFormat;
 }
 
