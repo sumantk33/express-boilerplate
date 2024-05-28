@@ -1,13 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import { HEADERS } from '../../utils/enums.js';
 import logger from '../../utils/logger/index.js';
-import httpContext from '../../utils/context/index.js';
+import ctx from '../../utils/context/index.js';
 
 function logRequest(req, res, next) {
-  httpContext.set(HEADERS.REQUEST_ID, req.headers[HEADERS.REQUEST_ID] || null);
-  httpContext.set(HEADERS.RESPONSE_ID, uuidv4());
-  httpContext.set(HEADERS.USER_AGENT, req.headers[HEADERS.USER_AGENT] || null);
-  logger.log('Request struct', {
+  ctx.set(HEADERS.RESPONSE_ID, uuidv4());
+  ctx.set(HEADERS.REQUEST_ID, req.headers[HEADERS.REQUEST_ID] || null);
+  ctx.set(HEADERS.USER_AGENT, req.headers[HEADERS.USER_AGENT] || null);
+  logger.log('Request log', {
     method: req.method,
     url: req.url,
     body: req.body,

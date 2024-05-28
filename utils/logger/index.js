@@ -1,7 +1,8 @@
 import circularJson from 'circular-json';
 import moment from 'moment';
 import { HEADERS } from '../enums.js';
-import httpContext from '../context/index.js';
+import ctx from '../context/index.js';
+import { env } from '../env/index.js';
 
 const timestampFormat = 'MMM-DD-YYYY HH:mm:ss';
 
@@ -18,7 +19,7 @@ class logger {
   }
 
   static debug(message, data) {
-    if (process.env.NODE_ENV === 'production') return;
+    if (env.isProdEnv) return;
     this.logMessage(LOGGER_TYPES.DEBUG, { message, data });
   }
 
@@ -32,12 +33,12 @@ class logger {
 
   static logMessage(type, logObject) {
     const logData = {
-      logType: type,
+      level: type,
       ...logObject,
       timestamp: moment().format(timestampFormat),
-      [HEADERS.RESPONSE_ID]: httpContext.get(HEADERS.RESPONSE_ID),
-      [HEADERS.REQUEST_ID]: httpContext.get(HEADERS.REQUEST_ID),
-      [HEADERS.USER_AGENT]: httpContext.get(HEADERS.USER_AGENT),
+      [HEADERS.RESPONSE_ID]: ctx.get(HEADERS.RESPONSE_ID),
+      [HEADERS.REQUEST_ID]: ctx.get(HEADERS.REQUEST_ID),
+      [HEADERS.USER_AGENT]: ctx.get(HEADERS.USER_AGENT),
     }
     console[type](circularJson.stringify(logData));
   }

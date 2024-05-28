@@ -3,15 +3,16 @@ import helmet from "helmet";
 import xss from "xss-clean";
 import cors from "cors";
 import z from "zod";
-import validateData from "./middleware/validator/index.js";
 import expressHealthcheck from "express-healthcheck";
-import logger from "./utils/logger/index.js";
+
+import validateData from "./middleware/validator/index.js";
 import { logRequest } from "./middleware/initMiddleware/index.js";
 import { STATUS_CODES, apiResponseStruct } from "./utils/apiUtils/index.js";
-import httpContext from "./utils/context/index.js";
+import ctx from "./utils/context/index.js";
+import { env } from "./utils/env/index.js";
+import { errorHandler, routeNotAvailable } from "./middleware/index.js";
 
 const app = express();
-const port = 3000;
 
 // set security HTTP headers
 app.use(helmet());
@@ -29,7 +30,7 @@ app.use(xss());
 app.use(cors());
 app.options("*", cors());
 
-app.use(httpContext.middleware);
+app.use(ctx.middleware);
 
 app.use(logRequest);
 
@@ -40,7 +41,7 @@ const userLoginSchema = z.object({
 	password: z.string().min(8),
 });
 
-app.post("/", validateData(userLoginSchema), (req, res) => {
+app.post("/login", validateData(userLoginSchema), (req, res, next) => {
 	res.status(STATUS_CODES.OK).json(
 		apiResponseStruct.success({
 			message: "Data received",
@@ -49,6 +50,9 @@ app.post("/", validateData(userLoginSchema), (req, res) => {
 	);
 });
 
-app.listen(port, () => {
-	console.log(`Example app listening on port ${port}`);
+app.use(routeNotAvailable);
+app.use(errorHandler);
+
+app.listen(env.PORT, () => {
+	console.log(`Example app listening on port ${env.PORT}`);
 });

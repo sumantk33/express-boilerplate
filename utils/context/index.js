@@ -1,3 +1,3 @@
-import httpContext from 'express-http-context';
+import ctx from 'express-http-context';
 
-export default httpContext;
+export default ctx;
