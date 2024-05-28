@@ -11,12 +11,11 @@ function validateData(schema) {
 				const errorMessages = error.errors.map((issue) => ({
 					message: `${issue.path.join(".")} - ${issue.message}`,
 				}));
-				logger.error("Validation error", errorMessages, res);
+				logger.error("Validation error", errorMessages);
 				return res.status(STATUS_CODES.BAD_REQUEST).json(
 					apiResponseStruct.failure({
 						message: errorMessages?.[0]?.message ?? "Invalid data",
 						displayMessage: "Please check the data format you have sent",
-						res,
 					})
 				);
 			}
@@ -24,7 +23,6 @@ function validateData(schema) {
 				apiResponseStruct.failure({
 					message: "Internal Server Error",
 					displayMessage: "Something went wrong",
-					res,
 				})
 			);
 		}

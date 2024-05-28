@@ -1,3 +1,4 @@
+import httpContext from "../context/index.js";
 import { HEADERS } from "../enums.js";
 import logger from "../logger/index.js";
 
@@ -18,24 +19,19 @@ function apiResponseFormat({
 	message,
 	displayMessage,
 	success = true,
-	res,
 }) {
 	const responseFormat = {
 		data,
 		meta: {
 			message,
 			displayMessage: displayMessage ?? message,
-			...(res
-				? {
-						[HEADERS.REQUEST_ID]: res.locals[HEADERS.REQUEST_ID],
-						[HEADERS.RESPONSE_ID]: res.locals[HEADERS.RESPONSE_ID],
-				  }
-				: {}),
+      [HEADERS.REQUEST_ID]: httpContext.get(HEADERS.REQUEST_ID),
+      [HEADERS.RESPONSE_ID]: httpContext.get(HEADERS.RESPONSE_ID),
 			success,
 		},
 	};
 
-	logger.log("Response struct", responseFormat, res);
+	logger.log("Response struct", responseFormat);
 	return responseFormat;
 }
 

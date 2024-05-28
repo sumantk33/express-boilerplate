@@ -8,6 +8,7 @@ import expressHealthcheck from "express-healthcheck";
 import logger from "./utils/logger/index.js";
 import { logRequest } from "./middleware/initMiddleware/index.js";
 import { STATUS_CODES, apiResponseStruct } from "./utils/apiUtils/index.js";
+import httpContext from "./utils/context/index.js";
 
 const app = express();
 const port = 3000;
@@ -28,6 +29,8 @@ app.use(xss());
 app.use(cors());
 app.options("*", cors());
 
+app.use(httpContext.middleware);
+
 app.use(logRequest);
 
 app.use("/healthcheck", expressHealthcheck());
@@ -41,7 +44,6 @@ app.post("/", validateData(userLoginSchema), (req, res) => {
 	res.status(STATUS_CODES.OK).json(
 		apiResponseStruct.success({
 			message: "Data received",
-			res,
 			data: req.body,
 		})
 	);
