@@ -1,7 +1,7 @@
 import express from "express";
 import validateData from "../../middleware/validator/index.js";
 import Joi from "joi";
-import { STATUS_CODES, apiResponseStruct } from "../../utils/apiUtils/index.js";
+import { STATUS_CODES } from "../../utils/apiUtils/index.js";
 import logger from "../../utils/logger/index.js";
 
 const router = express.Router();
@@ -33,12 +33,10 @@ const reqBodySchema = {
  * @param {Response} res - The Express response object.
  */
 router.post("/login", validateData(reqBodySchema), (req, res) => {
-	res.status(STATUS_CODES.OK).json(
-		apiResponseStruct.success({
-			message: "Data received",
-			data: req.body,
-		})
-	);
+	res.apiResponse(STATUS_CODES.OK, {
+		message: "Data received",
+		data: req.body,
+	});
 });
 
 /**
@@ -50,11 +48,9 @@ router.post("/login", validateData(reqBodySchema), (req, res) => {
  */
 router.post("/logger", (req, res) => {
 	logger.log("Logging body", req.body);
-	res.status(STATUS_CODES.OK).json(
-		apiResponseStruct.success({
-			message: "Logged successfully",
-		})
-	);
+	res.apiResponse(STATUS_CODES.OK, {
+		message: "Logged successfully",
+	});
 });
 
 export default router;

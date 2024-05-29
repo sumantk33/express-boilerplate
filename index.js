@@ -1,51 +1,33 @@
-import express from "express";
-import helmet from "helmet";
-import xss from "xss-clean";
-import compression from 'compression';
-import cors from "cors";
-import expressHealthcheck from "express-healthcheck";
-
-import { logRequest } from "./middleware/initMiddleware/index.js";
-import ctx from "./utils/context/index.js";
 import { env } from "./utils/env/index.js";
-import { errorHandler, rateLimiter, routeNotAvailable } from "./middleware/index.js";
-import v1Routes from "./routers/v1/index.js";
+import app from "./server.js";
+import logger from "./utils/logger/index.js";
 
-const app = express();
+let server = app.listen(env.PORT, () => {
+	console.log(`Express server running on port ${env.PORT}`);
+});
 
-// set security HTTP headers
-app.use(helmet());
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      logger.info('Server closed');
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+};
 
-// parse json request body
-app.use(express.json());
+const unexpectedErrorHandler = (error) => {
+  logger.error('Application error', error);
+  exitHandler();
+};
 
-// parse urlencoded request body
-app.use(express.urlencoded({ extended: true }));
+process.on('uncaughtException', unexpectedErrorHandler);
+process.on('unhandledRejection', unexpectedErrorHandler);
 
-// sanitize request data
-app.use(xss());
-
-// gzip compression
-app.use(compression());
-
-// enable cors
-app.use(cors());
-app.options("*", cors());
-
-
-// Init context for each request
-app.use(ctx.middleware);
-
-// Log each request and add headers to ctx
-app.use(logRequest);
-
-app.use("/healthcheck", expressHealthcheck());
-
-app.use("/api/v1", rateLimiter, v1Routes);
-
-app.use(routeNotAvailable);
-app.use(errorHandler);
-
-app.listen(env.PORT, () => {
-	console.log(`Example app listening on port ${env.PORT}`);
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received', {});
+  if (server) {
+    server.close();
+  }
 });

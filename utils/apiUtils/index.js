@@ -2,6 +2,11 @@ import ctx from "../context/index.js";
 import { HEADERS } from "../enums.js";
 import logger, { LOGGER_TYPES } from "../logger/index.js";
 
+const API_RESPONSE_TYPES = {
+	SUCCESS: "success",
+	FAILURE: "failure",
+};
+
 const STATUS_CODES = {
 	// 2xx
 	OK: 200,
@@ -24,9 +29,9 @@ const STATUS_CODES = {
  * Construct the response format for the API
  * @param {Object} data - Data object to be sent in the response
  * @param {string} message
- * @param {string | undefined} displayMessage
+ * @param {string} displayMessage
  * @param {bool} success
- * @returns {Object} - The formatted API response
+ * @returns {Object} responseFormat - The formatted API response
  */
 function apiResponseFormat({
 	data = null,
@@ -48,9 +53,9 @@ function apiResponseFormat({
 			...responseFormat.meta,
 			data: null,
 			requestId: ctx.get(HEADERS.REQUEST_ID),
-			logMessage: message
+			logMessage: message,
 		},
-	}
+	};
 
 	let loggerType = LOGGER_TYPES.LOG;
 	if (!success) {
@@ -62,8 +67,10 @@ function apiResponseFormat({
 }
 
 const apiResponseStruct = {
-	success: (props) => apiResponseFormat({ ...props, success: true }),
-	failure: (props) => apiResponseFormat({ ...props, success: false }),
+	[API_RESPONSE_TYPES.SUCCESS]: (props) =>
+		apiResponseFormat({ ...props, success: true }),
+	[API_RESPONSE_TYPES.FAILURE]: (props) =>
+		apiResponseFormat({ ...props, success: false }),
 };
 
-export { apiResponseStruct, STATUS_CODES };
+export { apiResponseStruct, STATUS_CODES, API_RESPONSE_TYPES };

@@ -1,6 +1,10 @@
 import { rateLimit } from "express-rate-limit";
 import { CONSTANTS } from "../config/enums.js";
-import { STATUS_CODES, apiResponseStruct } from "../utils/apiUtils/index.js";
+import {
+	API_RESPONSE_TYPES,
+	STATUS_CODES,
+	apiResponseStruct,
+} from "../utils/apiUtils/index.js";
 import logger from "../utils/logger/index.js";
 
 /**
@@ -10,10 +14,12 @@ import logger from "../utils/logger/index.js";
  * @returns {void}
  */
 function routeNotAvailable(_, res) {
-	res.status(STATUS_CODES.NOT_FOUND).json(
-		apiResponseStruct.failure({
+	res.apiResponse(
+		STATUS_CODES.NOT_FOUND,
+		{
 			message: "API route not available",
-		})
+		},
+		true
 	);
 }
 
@@ -27,11 +33,13 @@ function routeNotAvailable(_, res) {
  */
 function errorHandler(err, req, res, next) {
 	logger.error(err.message, err.stack);
-	res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(
-		apiResponseStruct.failure({
+	res.apiResponse(
+		STATUS_CODES.INTERNAL_SERVER_ERROR,
+		{
 			message: err.message || CONSTANTS.INTERNAL_SERVER_ERROR,
 			displayMessage: CONSTANTS.INTERNAL_SERVER_ERROR,
-		})
+		},
+		true
 	);
 }
 
@@ -41,11 +49,33 @@ const rateLimiter = rateLimit({
 	standardHeaders: false, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers,
 	handler: (req, res, next, options) =>
-		res.status(STATUS_CODES.TOO_MANY_REQUESTS).json(
-			apiResponseStruct.failure({
+		res.apiResponse(
+			STATUS_CODES.TOO_MANY_REQUESTS,
+			{
 				message: "Too many requests sent, please try again later.",
-			})
+			},
+			true
 		),
 });
 
-export { routeNotAvailable, errorHandler, rateLimiter };
+/**
+ * Description
+ * @param {Request} _
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @returns {void}
+ */
+function appendCustomSendFunc(_, res, next) {
+	res.apiResponse = (status, responseBody, isError = false) => {
+		res
+			.status(status)
+			.json(
+				apiResponseStruct[
+					isError ? API_RESPONSE_TYPES.FAILURE : API_RESPONSE_TYPES.SUCCESS
+				](responseBody)
+			);
+	};
+	next();
+}
+
+export { routeNotAvailable, errorHandler, rateLimiter, appendCustomSendFunc };
