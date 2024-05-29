@@ -3,18 +3,31 @@ import { HEADERS } from "../enums.js";
 import logger, { LOGGER_TYPES } from "../logger/index.js";
 
 const STATUS_CODES = {
+	// 2xx
 	OK: 200,
 	CREATED: 201,
 	ACCEPTED: 202,
+
+	// 4xx
 	BAD_REQUEST: 400,
 	UNAUTHORIZED: 401,
 	FORBIDDEN: 403,
 	NOT_FOUND: 404,
 	METHOD_NOT_ALLOWED: 405,
 	TOO_MANY_REQUESTS: 429,
+
+	// 5xx
 	INTERNAL_SERVER_ERROR: 500,
 };
 
+/**
+ * Construct the response format for the API
+ * @param {Object} data - Data object to be sent in the response
+ * @param {string} message
+ * @param {string | undefined} displayMessage
+ * @param {bool} success
+ * @returns {Object} - The formatted API response
+ */
 function apiResponseFormat({
 	data = null,
 	message,
@@ -24,20 +37,27 @@ function apiResponseFormat({
 	const responseFormat = {
 		data,
 		meta: {
-			message,
-			displayMessage: displayMessage ?? message,
-			requestId: ctx.get(HEADERS.REQUEST_ID),
-			responseId: ctx.get(HEADERS.RESPONSE_ID),
+			message: displayMessage ?? message,
 			success,
 		},
 	};
+
+	const logResponseFormat = {
+		...responseFormat,
+		meta: {
+			...responseFormat.meta,
+			data: null,
+			requestId: ctx.get(HEADERS.REQUEST_ID),
+			logMessage: message
+		},
+	}
 
 	let loggerType = LOGGER_TYPES.LOG;
 	if (!success) {
 		loggerType = LOGGER_TYPES.ERROR;
 	}
 
-	logger[loggerType]("Response log", responseFormat);
+	logger[loggerType]("Response log", logResponseFormat);
 	return responseFormat;
 }
 

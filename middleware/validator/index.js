@@ -1,7 +1,13 @@
 import Joi from "joi";
 import { STATUS_CODES, apiResponseStruct } from "../../utils/apiUtils/index.js";
 import { pick } from "../../utils/index.js";
+import logger from "../../utils/logger/index.js";
 
+/**
+ * Validates the req data against the schema
+ * @param {Schema} schema
+ * @returns {void}
+ */
 const validateData = (schema) => (req, res, next) => {
   const validSchema = pick(schema, ['params', 'query', 'body']);
   const object = pick(req, Object.keys(validSchema));
@@ -11,6 +17,7 @@ const validateData = (schema) => (req, res, next) => {
 
   if (error) {
     const errorMessage = error.details.map((details) => details.message).join(', ');
+    logger.error('Validation error', { errorMessage, object});
     return res.status(STATUS_CODES.BAD_REQUEST).json(
 			apiResponseStruct.failure({
 				message: errorMessage,

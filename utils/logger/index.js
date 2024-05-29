@@ -31,12 +31,18 @@ class logger {
     this.logMessage(LOGGER_TYPES.INFO, { message, data });
   }
 
+  /**
+   * Logging util function
+   * @param {string} type
+   * @param {Object} logObject
+   * @returns {void}
+   */
   static logMessage(type, logObject) {
     const logData = {
       level: type,
       ...logObject,
+      message: `----------${logObject.message}----------`,
       timestamp: moment().format(timestampFormat),
-      [HEADERS.RESPONSE_ID]: ctx.get(HEADERS.RESPONSE_ID),
       [HEADERS.REQUEST_ID]: ctx.get(HEADERS.REQUEST_ID),
       [HEADERS.USER_AGENT]: ctx.get(HEADERS.USER_AGENT),
     }

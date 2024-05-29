@@ -3,6 +3,12 @@ import { CONSTANTS } from "../config/enums.js";
 import { STATUS_CODES, apiResponseStruct } from "../utils/apiUtils/index.js";
 import logger from "../utils/logger/index.js";
 
+/**
+ * Handles the 404 routes
+ * @param {Request} _
+ * @param {Response} res
+ * @returns {void}
+ */
 function routeNotAvailable(_, res) {
 	res.status(STATUS_CODES.NOT_FOUND).json(
 		apiResponseStruct.failure({
@@ -11,6 +17,14 @@ function routeNotAvailable(_, res) {
 	);
 }
 
+/**
+ * Error handler middleware for any uncaught errors
+ * @param {Error} err
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @returns {void}
+ */
 function errorHandler(err, req, res, next) {
 	logger.error(err.message, err.stack);
 	res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(
