@@ -62,7 +62,7 @@ function apiResponseFormat({
 		loggerType = LOGGER_TYPES.ERROR;
 	}
 
-	logger[loggerType]("Response log", logResponseFormat);
+	logger[loggerType]("Response", logResponseFormat);
 	return responseFormat;
 }
 

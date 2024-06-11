@@ -41,7 +41,7 @@ class logger {
     const logData = {
       level: type,
       ...logObject,
-      message: `----------${logObject.message}----------`,
+      message: `---${(logObject.message).toUpperCase()}---`,
       timestamp: moment().format(timestampFormat),
       [HEADERS.REQUEST_ID]: ctx.get(HEADERS.REQUEST_ID),
       [HEADERS.USER_AGENT]: ctx.get(HEADERS.USER_AGENT),

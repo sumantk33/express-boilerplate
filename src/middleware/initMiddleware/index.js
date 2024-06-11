@@ -15,7 +15,7 @@ function logRequest(req, res, next) {
   ctx.set(HEADERS.REQUEST_ID, requestId);
   ctx.set(HEADERS.USER_AGENT, req.headers[HEADERS.USER_AGENT] || null);
   res.set(HEADERS.REQUEST_ID, requestId);
-  logger.log('Request log', {
+  logger.log('Request', {
     method: req.method,
     url: req.url,
     body: req.body,

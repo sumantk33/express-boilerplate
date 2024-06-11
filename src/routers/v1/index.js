@@ -47,7 +47,7 @@ router.post("/login", validateData(reqBodySchema), (req, res) => {
  * @param {Response} res - The Express response object.
  */
 router.post("/logger", (req, res) => {
-	logger.log("Logging body", req.body);
+	logger.log("Logger req body", req.body);
 	res.apiResponse(STATUS_CODES.OK, {
 		message: "Logged successfully",
 	});
