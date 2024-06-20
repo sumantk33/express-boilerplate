@@ -178,6 +178,23 @@ In development mode, log messages of all severity levels will be printed to the 
 
 In production mode, only `info`, `error`, and `log` logs will be printed to the console.\
 
+## API response format
+
+Custom API format is as below, which can be changed in `src\utils\api-utils.js`
+
+```javascript
+{
+  data: {
+    email: "***",
+    password: "***"
+  },
+  meta: {
+    message: "Success",
+    success: true
+  }
+}
+```
+
 ## Custom res.send() function
 
 Custom apiResponse has been implemented which accepts two mandatory params and one optional param. FIrst param is the status param and the second one is the res.data object which needs to be sent. Third optional one is the flag to indicate whether the API response is a failure or not.
