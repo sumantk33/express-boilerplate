@@ -9,7 +9,7 @@ import {
   errorHandler,
   rateLimiter,
   routeNotAvailable,
-} from './middleware/index.js';
+} from './middleware/common-middleware.js';
 import v1Routes from './routers/v1/index.js';
 import { logRequest } from './middleware/logger-middleware.js';
 import ctx from './lib/context.js';

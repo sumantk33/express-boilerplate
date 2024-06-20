@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import { pick } from '../utils/index.js';
+import { pick } from '../utils/common-utils.js';
 import logger from '../utils/logger-util.js';
 import { STATUS_CODES } from '../utils/enums.js';
 
