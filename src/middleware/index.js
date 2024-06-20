@@ -1,7 +1,7 @@
-import { rateLimit } from "express-rate-limit";
-import { API_RESPONSE_TYPES, apiResponseStruct } from "../utils/api-utils.js";
-import logger from "../utils/logger-util.js";
-import { CONSTANTS, STATUS_CODES } from "../utils/enums.js";
+import { rateLimit } from 'express-rate-limit';
+import { API_RESPONSE_TYPES, apiResponseStruct } from '../utils/api-utils.js';
+import logger from '../utils/logger-util.js';
+import { CONSTANTS, STATUS_CODES } from '../utils/enums.js';
 
 /**
  * Handles the 404 routes
@@ -13,7 +13,7 @@ function routeNotAvailable(_, res) {
   res.apiResponse(
     STATUS_CODES.NOT_FOUND,
     {
-      message: "API route not available",
+      message: 'API route not available',
     },
     true
   );
@@ -49,7 +49,7 @@ const rateLimiter = rateLimit({
     res.apiResponse(
       STATUS_CODES.TOO_MANY_REQUESTS,
       {
-        message: "Too many requests sent, please try again later.",
+        message: 'Too many requests sent, please try again later.',
       },
       true
     ),

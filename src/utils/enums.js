@@ -1,11 +1,11 @@
 const HEADERS = {
-  REQUEST_ID: "x-request-id",
-  RESPONSE_ID: "x-response-id",
-  USER_AGENT: "x-user-agent",
+  REQUEST_ID: 'x-request-id',
+  RESPONSE_ID: 'x-response-id',
+  USER_AGENT: 'x-user-agent',
 };
 
 const CONSTANTS = {
-  INTERNAL_SERVER_ERROR: "Internal server error",
+  INTERNAL_SERVER_ERROR: 'Internal server error',
 };
 
 const STATUS_CODES = {

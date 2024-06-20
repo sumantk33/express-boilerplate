@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --inspect src/index.js",
     "start": "node src/index.js",
-    "lint": "eslint **/*.js --ignore-pattern node_modules/"
+    "lint": "eslint **/*.js --ignore-pattern node_modules/",
+    "lint:fix": "eslint --fix",
+    "prettier:fix": "npx prettier --write . ",
+    "prepare": "husky"
   },
   "author": "Sumant Katti",
   "license": "ISC",
@@ -32,7 +35,9 @@
     "eslint": "^9.5.0",
     "globals": "^15.6.0",
     "husky": "^9.0.11",
-    "nodemon": "^3.1.0"
+    "lint-staged": "^15.2.7",
+    "nodemon": "^3.1.0",
+    "prettier": "3.3.2"
   },
   "husky": {
     "hooks": {
@@ -41,8 +46,8 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint — fix",
-      "prettier — write"
+      "npm run lint",
+      "npm run prettier:fix"
     ]
   }
 }

@@ -1,10 +1,10 @@
-import { HEADERS } from "./enums.js";
-import ctx from "../lib/context.js";
-import logger, { LOGGER_TYPES } from "./logger-util.js";
+import { HEADERS } from './enums.js';
+import ctx from '../lib/context.js';
+import logger, { LOGGER_TYPES } from './logger-util.js';
 
 const API_RESPONSE_TYPES = {
-  SUCCESS: "success",
-  FAILURE: "failure",
+  SUCCESS: 'success',
+  FAILURE: 'failure',
 };
 
 /**
@@ -44,7 +44,7 @@ function apiResponseFormat({
     loggerType = LOGGER_TYPES.ERROR;
   }
 
-  logger[loggerType]("Response", logResponseFormat);
+  logger[loggerType]('Response', logResponseFormat);
   return responseFormat;
 }
 

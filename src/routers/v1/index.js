@@ -1,18 +1,18 @@
-import express from "express";
-import Joi from "joi";
-import logger from "../../utils/logger-util.js";
-import validateData from "../../middleware/validator.js";
-import { STATUS_CODES } from "../../utils/enums.js";
+import express from 'express';
+import Joi from 'joi';
+import logger from '../../utils/logger-util.js';
+import validateData from '../../middleware/validator.js';
+import { STATUS_CODES } from '../../utils/enums.js';
 
 const router = express.Router();
 
 const password = (value, helpers) => {
   if (value.length < 8) {
-    return helpers.message("password must be at least 8 characters");
+    return helpers.message('password must be at least 8 characters');
   }
   if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
     return helpers.message(
-      "password must contain at least 1 letter and 1 number"
+      'password must contain at least 1 letter and 1 number'
     );
   }
   return value;
@@ -32,9 +32,9 @@ const reqBodySchema = {
  * @param {Request} req - The Express request object.
  * @param {Response} res - The Express response object.
  */
-router.post("/login", validateData(reqBodySchema), (req, res) => {
+router.post('/login', validateData(reqBodySchema), (req, res) => {
   res.apiResponse(STATUS_CODES.OK, {
-    message: "Data received",
+    message: 'Data received',
     data: req.body,
   });
 });
@@ -46,10 +46,10 @@ router.post("/login", validateData(reqBodySchema), (req, res) => {
  * @param {Request} req - The Express request object.
  * @param {Response} res - The Express response object.
  */
-router.post("/logger", (req, res) => {
-  logger.log("Logger req body", req.body);
+router.post('/logger', (req, res) => {
+  logger.log('Logger req body', req.body);
   res.apiResponse(STATUS_CODES.OK, {
-    message: "Logged successfully",
+    message: 'Logged successfully',
   });
 });
 

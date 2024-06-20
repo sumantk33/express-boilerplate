@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 const ENV_ENUM = {
-  PRODUCTION: "production",
-  DEV: "development",
+  PRODUCTION: 'production',
+  DEV: 'development',
 };
 
 const env = {
