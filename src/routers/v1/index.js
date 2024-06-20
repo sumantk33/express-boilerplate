@@ -1,28 +1,28 @@
 import express from "express";
-import validateData from "../../middleware/validator/index.js";
 import Joi from "joi";
-import { STATUS_CODES } from "../../utils/apiUtils/index.js";
-import logger from "../../utils/logger/index.js";
+import logger from "../../utils/logger-util.js";
+import validateData from "../../middleware/validator.js";
+import { STATUS_CODES } from "../../utils/enums.js";
 
 const router = express.Router();
 
 const password = (value, helpers) => {
-	if (value.length < 8) {
-		return helpers.message("password must be at least 8 characters");
-	}
-	if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-		return helpers.message(
-			"password must contain at least 1 letter and 1 number"
-		);
-	}
-	return value;
+  if (value.length < 8) {
+    return helpers.message("password must be at least 8 characters");
+  }
+  if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+    return helpers.message(
+      "password must contain at least 1 letter and 1 number"
+    );
+  }
+  return value;
 };
 
 const reqBodySchema = {
-	body: Joi.object().keys({
-		email: Joi.string().required().email(),
-		password: Joi.string().required().custom(password),
-	}),
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().custom(password),
+  }),
 };
 
 /**
@@ -33,10 +33,10 @@ const reqBodySchema = {
  * @param {Response} res - The Express response object.
  */
 router.post("/login", validateData(reqBodySchema), (req, res) => {
-	res.apiResponse(STATUS_CODES.OK, {
-		message: "Data received",
-		data: req.body,
-	});
+  res.apiResponse(STATUS_CODES.OK, {
+    message: "Data received",
+    data: req.body,
+  });
 });
 
 /**
@@ -47,10 +47,10 @@ router.post("/login", validateData(reqBodySchema), (req, res) => {
  * @param {Response} res - The Express response object.
  */
 router.post("/logger", (req, res) => {
-	logger.log("Logger req body", req.body);
-	res.apiResponse(STATUS_CODES.OK, {
-		message: "Logged successfully",
-	});
+  logger.log("Logger req body", req.body);
+  res.apiResponse(STATUS_CODES.OK, {
+    message: "Logged successfully",
+  });
 });
 
 export default router;

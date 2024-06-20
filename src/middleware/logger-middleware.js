@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from 'uuid';
-import { HEADERS } from '../../utils/enums.js';
-import logger from '../../utils/logger/index.js';
-import ctx from '../../utils/context/index.js';
+import { v4 as uuidv4 } from "uuid";
+import { HEADERS } from "../utils/enums.js";
+import logger from "../utils/logger-util.js";
+import ctx from "../lib/context.js";
 
 /**
  * Logs each request and adds headers to ctx
@@ -15,13 +15,13 @@ function logRequest(req, res, next) {
   ctx.set(HEADERS.REQUEST_ID, requestId);
   ctx.set(HEADERS.USER_AGENT, req.headers[HEADERS.USER_AGENT] || null);
   res.set(HEADERS.REQUEST_ID, requestId);
-  logger.log('Request', {
+  logger.log("Request", {
     method: req.method,
     url: req.url,
     body: req.body,
     query: req.query,
     params: req.params,
-  })
+  });
   next();
 }
 

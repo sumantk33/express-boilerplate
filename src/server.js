@@ -4,16 +4,15 @@ import xss from "xss-clean";
 import compression from "compression";
 import cors from "cors";
 import expressHealthcheck from "express-healthcheck";
-
-import { logRequest } from "./middleware/initMiddleware/index.js";
-import ctx from "./utils/context/index.js";
 import {
-	appendCustomSendFunc,
-	errorHandler,
-	rateLimiter,
-	routeNotAvailable,
+  appendCustomSendFunc,
+  errorHandler,
+  rateLimiter,
+  routeNotAvailable,
 } from "./middleware/index.js";
 import v1Routes from "./routers/v1/index.js";
+import { logRequest } from "./middleware/logger-middleware.js";
+import ctx from "./lib/context.js";
 
 const app = express();
 
