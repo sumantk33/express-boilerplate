@@ -1,7 +1,7 @@
 import { rateLimit } from "express-rate-limit";
 import { API_RESPONSE_TYPES, apiResponseStruct } from "../utils/api-utils.js";
 import logger from "../utils/logger-util.js";
-import { CONSTANTS } from "../utils/enums.js";
+import { CONSTANTS, STATUS_CODES } from "../utils/enums.js";
 
 /**
  * Handles the 404 routes
@@ -27,6 +27,7 @@ function routeNotAvailable(_, res) {
  * @param {NextFunction} next
  * @returns {void}
  */
+// eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
   logger.error(err.message, err.stack);
   res.apiResponse(
@@ -44,7 +45,7 @@ const rateLimiter = rateLimit({
   limit: 2, // Limit each IP to 2 requests per `window` (here, per minute)
   standardHeaders: false, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers,
-  handler: (req, res, next, options) =>
+  handler: (req, res) =>
     res.apiResponse(
       STATUS_CODES.TOO_MANY_REQUESTS,
       {
